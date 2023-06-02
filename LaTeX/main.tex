@@ -78,9 +78,9 @@ Considering this, I wanted to explore the use of genre-specific audio and artist
 
 \section{\textbf{Dataset and Features}}
 
-Spotify reports over 80 million tracks on its platforms and its WebAPI for obtaining a track's audio features was queried by inputation of a track's unique URI or ID. Considering this, I obtained a dataset of 50,000 random Spotify tracks originating from this API which were distributed between 10 unique genres: Electronic, Anime, Jazz, Alternative, Country, Rap, Blues, Rock, Classical, and Hip-Hop. 
+Spotify reports over 80 million tracks on its platforms and its WebAPI for obtaining a track's audio features was queried by imputation of a track's unique URI or ID. Considering this, I obtained a dataset of 50,000 random Spotify tracks originating from this API which were distributed between 10 unique genres: Electronic, Anime, Jazz, Alternative, Country, Rap, Blues, Rock, Classical, and Hip-Hop. 
 \\ \\
-Where there were 10 unique genres, there were 18 features for each queried track. From these 18 features, I immediately dropped \textit{artist\_name}, \textit{instance\_id}, \textit{track\_name}, and \textit{obtained\_date}. The remaining features are shown below with their feature name, data type, and a short description
+While there were 10 unique genres, there were 18 features for each queried track. From these 18 features, I immediately dropped \textit{artist\_name}, \textit{instance\_id}, \textit{track\_name}, and \textit{obtained\_date}. The remaining features are shown below with their feature name, data type, and a short description
 
 \begin{longtable}{|l|c|p{6cm}|}
 \hline
@@ -156,30 +156,30 @@ Analyzing the Scree Plot allows for understanding of individual feature contribu
 \end{figure}
 
 \noindent
-It was necessary to decide the optimal number of components to use for the PCA, which I decided to set as features with eigenvalue masses above \textbf{0.05}. In doing so, I was left to train a PCA with 9 principal components and fit it onto both the training and test data. Now having the PCA-reduced dataset, I wanted to visualize each prinicpal component
+It was necessary to decide the optimal number of components to use for the PCA, which I decided to set as features with eigenvalue masses above \textbf{0.05}. In doing so, I was left to train a PCA with 9 principal components and fit it onto both the training and test data. Now having the PCA-reduced dataset, I wanted to visualize each principal component
 
 \begin{figure}[htbp]
   \centering
   \vspace{-0.075cm}
-  \includegraphics[width=0.8\textwidth]{9_pca.png}
+  \includegraphics[width=0.6\textwidth]{9_pca.png}
   \caption{PCA Reduced Spotify Dataset}
   \label{PCA Scree Plot}
 \end{figure}
 
 \noindent
-Looking at both the Scree Plot and the PCA-reduced dataset, the first principal component clearly contains the most eigenvalue mass with the other features dropping off quite significantly. The decision to include 9 principal components decently explains the majority of data variance while reducing the complexity of both the data and the eventual model training process.
+Looking at both the Scree Plot and the PCA-reduced dataset, the first principal component contains the most eigenvalue mass with the other features dropping off quite significantly. The decision to include 9 principal components decently explains the majority of data variance while reducing the complexity of both the data and the eventual model training process.
 
 \section*{\textbf{Clustering}}
 KMeans clustering was implemented as it would allow for the grouping of songs with similar features to create an underlying structure within the data to enhance the subsequent training of a Random Forest Classifier.
 
 \subsection*{\textbf{Optimal Clusters for KMeans}}
-KMeans clustering segregates the PCA-reduced dataset into \textit{k} clusters. However determination of optimal number of clusters to train was crucial to maximize accuracy and effectiveness within the clustering model. I used two methods to make this distinction, the \textbf{silhouette scores} of a range of clusters and the \textbf{within-cluster sum of squares (WCSS)} metric for the elbow criterion. I first analyzed the silhouette scores of a range of clusters
+KMeans clustering segregates the PCA-reduced dataset into \textit{k} clusters. However determination of optimal number of clusters to train was crucial thus I used two methods to make this distinction, the \textbf{silhouette scores} of a range of clusters and the \textbf{within-cluster sum of squares (WCSS)} metric for the elbow criterion. I first analyzed the silhouette scores of a range of clusters
 
 
 \begin{figure}[htbp]
   \centering
   \vspace{-0.075cm}
-  \includegraphics[width=0.8\textwidth]{kmeans_silhouette.png}
+  \includegraphics[width=0.65\textwidth]{kmeans_silhouette.png}
   \caption{Silhouette Score of KMeans Clusters}
   \label{KMeans Silhouette Scores}
 \end{figure}
@@ -189,13 +189,13 @@ KMeans clustering segregates the PCA-reduced dataset into \textit{k} clusters. H
 The silhouette score measures how similar a sample is within its own cluster compared to other clusters. Analyzing the silhouette scores here, it is noticeable that the steepest drop-off of silhouette scores is at the \textbf{fourth} cluster. We want to aim for the the number of clusters in which the silhouette score is the highest, which leaves us with a choice of either 2 clusters, which gives the highest silhouette score, or 4 clusters after which the silhouette score drops off rapidly. \\ 
 
 \noindent
-However given these choices, I would still need to consider the elbow criterion in order to determine a final number of clusters to train for my KMeans model. For the elbow method, the sum of squared distances is calculated from each point to its assigned center and a within-cluster sum of squares (WCSS) score is calculated to determine which number of cluster results in the lowest WCSS score for the  model
+Given these choices, I still needed to consider the elbow criterion to determine a final number of clusters to train for my KMeans model. For the elbow method, the sum of squared distances is calculated from each point to its assigned center and a within-cluster sum of squares (WCSS) score is calculated to determine which number of cluster results in the lowest WCSS score for the  model
 
 
 \begin{figure}[htbp]
   \centering
   \vspace{-0.075cm}
-  \includegraphics[width=0.8\textwidth]{kmeans_elbow.png}
+  \includegraphics[width=0.65\textwidth]{kmeans_elbow.png}
   \caption{Within-Cluster Sum of Squares}
   \label{KMeans Elbow Criterion WCSS}
 \end{figure}
